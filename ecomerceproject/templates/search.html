@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block metadescription %}
+Search results | all the details related to your search key
+
+{% endblock %}
+
+{% block title %}
+
+   Search results |Ogin Mini Mart
+
+{% endblock %}
+
+{% block content %}
+
+<section class="p-5">
+   <div class="container">
+      <div class="text-center">
+         <p>You have searched for: <b>"{{query}}"</b></p>
+      </div>
+   </div>
+</section>
+
+<section class="p-5">
+   <div class="row">
+        {% for product in products %}
+        <div class="col-md-3 mb-5">
+            <div class="card  shadow p-2" style="width: -webkit-fill-available;;">
+                <img alt="Card image cap" class="card-img-top" height="270px"
+                     src="{% if product.image %}{{ product.image.url }}{% else %}#{% endif %}">
+                <div class="card-body">
+                    <h5 class="card-title">{{product.title}}</h5>
+                    <p class="card-text">₹ {{product.price}}</p>
+                    <a class="btn btn-warning" href="{% url 'cart:add_cart' product.id %}"><i class="fa-solid fa-cart-arrow-down"></i> Add to cart</a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="text-center">
+         <p><b>" No results found "</b></p>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+{% endblock %}

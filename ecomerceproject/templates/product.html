@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block metadescription %}
+{% if product %}
+{{ product.description|truncatewords:150 }}
+{% else %}
+Welcome to Ogin fresh mini-mart
+{% endif %}
+{% endblock %}
+
+{% block title %}
+{% if product %}
+{{ product.title}} | Ogin Mini Mart
+{% else %}
+See our new items - Ogin Mini Mart
+{% endif %}
+{% endblock %}
+
+{% block content %}
+
+
+<!--category-start-->
+<section class="p-5">
+    <div class="row">
+        <div class="col-lg-6 p-4">
+            <div class="card shadow p-2" style="width:-webkit-fill-available;">
+                <img alt="Card image cap" class="card-img-top" src="{{product.image.url}}">
+            </div>
+        </div>
+        <div class="col-lg-6 p-4">
+            <div class="card shadow p-2" style="width: -webkit-fill-available;">
+                <div class="card-header text-dark">
+                    <h1>{{product.title}}</h1>
+                </div>
+                <div class="card-header text-dark">
+                    <h4>₹ {{product.price}}</h4>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title text-dark">Product Description</h5>
+                    <p class="card-text text-dark">{{product.description}}</p>
+                    <a class="btn btn-warning" href="{% url 'cart:add_cart' product.id %}"><i class="fa-solid fa-cart-arrow-down"></i> Add To Cart</a>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!--category-end-->
+
+<!--category-products-start-->
+<section class="p-5">
+    <div class="row">
+        {% for product in product_links %}
+        <div class="col-md-3 mb-5">
+            <div class="card  shadow p-2" style="width: -webkit-fill-available;;">
+                <img alt="Card image cap" class="card-img-top" height="270px"
+                     src="{% if product.image %}{{ product.image.url }}{% else %}#{% endif %}">
+                <div class="card-body">
+                    <h5 class="card-title">{{product.title}}</h5>
+                    <p class="card-text">₹ {{product.price}}</p>
+                    <a class="btn btn-warning" href="{% url 'cart:add_cart' product.id %}"><i class="fa-solid fa-cart-arrow-down"></i> Add to cart</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+</section>
+<!--category-products-end-->
+
+
+{% endblock %}

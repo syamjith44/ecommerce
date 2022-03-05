@@ -1,0 +1,53 @@
+{% load static %}
+<header class="sticky-top">
+<nav class="navbar navbar-expand-lg navbar-dark bg-danger ">
+    <div class="container-fluid">
+        <a class="navbar-brand text-light fs-2" href="{% url 'shop:home' %}">Ogin Mini Mart</a>
+        <button aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"
+                class="navbar-toggler justify-contents-end" data-bs-target="#navbarSupportedContent" data-bs-toggle="collapse"
+                type="button">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a aria-current="page" class="nav-link active text-light fs-5" href="{% url 'shop:home' %}"><i class="fa-solid fa-house-chimney"></i></a>
+                </li>
+                {% if item_count > 0 %}
+                <li class="nav-item">
+                    <a aria-current="page" class="nav-link active text-light fs-5" href="{% url 'cart:cart_detail' %}"><i class="fa-solid fa-cart-shopping"></i>({{item_count}})</a>
+                </li>
+                {% endif %}
+                {% for category in category_links %}
+                {% if category.popular %}
+                <li class="nav-item dropdown">
+                    <a aria-expanded="false" class="nav-link dropdown-toggle text-light fs-5" data-bs-toggle="dropdown" href=""
+                       id="navbarDropdown" role="button">
+                        {{category.title}}
+                    </a>
+                    <ul aria-labelledby="navbarDropdown" class="dropdown-menu bg-danger">
+                        {% for product in product_links %}
+                        {% if product.category.slug  == category.slug %}
+                        {% if product.popular %}
+                        <li><a class="dropdown-item text-light" href="{{product.get_product_url}}">{{product.title}}</a></li>
+                        {% endif %}
+                        {% endif %}
+                        {% endfor %}
+                        <li>
+                            <hr class="dropdown-divider text-light">
+                        </li>
+                        <li><a class="dropdown-item text-light" href="{{category.get_url}}">More items</a></li>
+                    </ul>
+                </li>
+                {% endif %}
+                {% endfor %}
+            </ul>
+            <form class="d-flex" method="get" action="{% url 'search_app:searchResults' %}">
+                {% csrf_token %}
+                <input aria-label="Search" name="q" class="form-control me-2 bg-gradient-danger border-light text-dark " placeholder="Search" type="search">
+                <button class="btn btn-outline-light" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+            </form>
+        </div>
+    </div>
+</nav>
+</header>

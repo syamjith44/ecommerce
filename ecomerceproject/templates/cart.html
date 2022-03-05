@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block metadescription %}
+Your Cart| all your orders are here
+
+{% endblock %}
+
+{% block title %}
+
+Cart|Ogin Mini Mart
+
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+    <section>
+
+        <div class="row">
+            {% if not cart_items %}
+            <div class="col-lg-12 col-md-12 col-xs-12 text-center p-5">
+                <h1>Your cart is empty</h1>
+                <br>
+                <h4>Add something to your cart</h4>
+                <br>
+                <a href="{% url 'shop:home' %}">
+                    <button class="btn btn-warning">Shop</button>
+                </a>
+                <br>
+            </div>
+            {% else %}
+            <div class="col-lg-6 col-md-6 col-xs-12 p-4">
+                <div class="card shadow" style="width:webkit-fill-available;">
+                    <div class="card-body">
+                        <h5 class="card-title">Your items</h5>
+                        {% for cart_item in cart_items %}
+                        <table class="table-hover">
+                            <tr>
+                                <td colspan="3" rowspan="3"><img height="100px" src="{{cart_item.product.image.url}}"
+                                                                 width="100px"></td>
+                                <td><h4>  {{cart_item.product.title}}</h4></td>
+                            </tr>
+                            <tr>
+                                <td><h6>  Qty: {{cart_item.quantity}}x₹{{cart_item.product.price}}</h6></td>
+                            </tr>
+                            <tr>
+                                <td><h6>  Total: ₹{{cart_item.sub_total}} </h6></td>
+                            </tr>
+
+                            <tr>
+                                <td colspan="2"><a href="{% url 'cart:delete_cart_item' cart_item.product.id %}">
+                                    <button class="btn btn-danger"><i class="fa-solid fa-trash-can"></i> delete</button>
+                                </a></td>
+                                <td colspan="2">
+                                    <a href="{% url 'cart:remove_cart' cart_item.product.id %}">
+                                        <button class="btn-sm btn-warning"><i class="fa-solid fa-minus"></i></button>
+                                    </a>
+                                    {{cart_item.quantity}}
+                                    {% if cart_item.quantity < cart_item.product.stock %}
+                                    <a href="{% url 'cart:add_cart' cart_item.product.id %}">
+                                        <button class="btn-sm btn-warning"><i class="fa-solid fa-plus"></i></button>
+                                    </a>
+                                    {% endif %}
+                                </td>
+
+                            </tr>
+
+                        </table>
+                        <br>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-6 col-xs-12 p-4">
+                <div class="card shadow" style="width:webkit-fill-available;">
+                    <div class="card-body">
+                        <h5 class="card-title">Checkout</h5>
+                        <p> check all items before proceeding to payment </p>
+                        <table>
+                            {% for cart_item in cart_items %}
+                            <tr>
+                                <td colspan="4">{{cart_item.product.title}}</td>
+                                <td> ₹{{cart_item.sub_total}}</td>
+                            </tr>
+                            {% endfor %}
+                            <tr>
+                                <td colspan="4"><h6>Total</h6></td>
+                                <td>₹{{total}}</td>
+                            </tr>
+                        </table>
+                        <a href="{% url 'shop:home' %}">
+                            <button class="btn btn-warning">Proceed to pay</button>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </section>
+</div>
+
+{% endblock %}

@@ -1,0 +1,122 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block metadescription %}
+We deliver quality products | all your daily needs at your fingertip
+
+{% endblock %}
+
+{% block title %}
+
+Ogin Mini Mart
+
+{% endblock %}
+
+{% block content %}
+
+{% if offers %}
+<!--offers-start-->
+<section class="p-5">
+    <div class="carousel slide" data-ride="carousel" id="carouselExampleIndicators">
+        <ol class="carousel-indicators">
+            <li class="active" data-slide-to="0" data-target="#carouselExampleIndicators"></li>
+            <li data-slide-to="1" data-target="#carouselExampleIndicators"></li>
+            <li data-slide-to="2" data-target="#carouselExampleIndicators"></li>
+        </ol>
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img alt="First slide" class="d-block w-100" src="...">
+            </div>
+            <div class="carousel-item">
+                <img alt="Second slide" class="d-block w-100" src="...">
+            </div>
+            <div class="carousel-item">
+                <img alt="Third slide" class="d-block w-100" src="...">
+            </div>
+        </div>
+        <a class="carousel-control-prev" data-slide="prev" href="#carouselExampleIndicators" role="button">
+            <span aria-hidden="true" class="carousel-control-prev-icon"></span>
+            <span class="sr-only">Previous</span>
+        </a>
+        <a class="carousel-control-next" data-slide="next" href="#carouselExampleIndicators" role="button">
+            <span aria-hidden="true" class="carousel-control-next-icon"></span>
+            <span class="sr-only">Next</span>
+        </a>
+    </div>
+</section>
+<!--offers-end-->
+{% else %}
+<!--banner-start-->
+<section>
+    <div class="row">
+        <div class="col-lg-12 p-4">
+            <div class="card shadow" style="width:-webkit-fill-available;">
+                <img alt="Card image cap" class="card-img-top" src="{% static 'images/banner.jpg' %}">
+            </div>
+        </div>
+    </div>
+</section>
+<!--banner-end-->
+{% endif %}
+
+<!--category-star-t-->
+<section class="p-5">
+    <div class="row">
+        <h3>Categories</h3><br>
+
+        {% for i in category %}
+        <div class="col-md-3 col-lg-2 col-xs-12 d-flex justify-content-center mb-3">
+            <a href="{{i.get_url}}" style="text-decoration: none;">
+
+                <div class="card shadow p-3" style="width:12rem;">
+                    <img alt="100%x280" class="card-img-top" height="150px"
+                         src="{{i.image.url}}">
+                    <div class="card-body">
+                        <h4 class="card-title text-dark">{{i.title}}</h4>
+                    </div>
+                </div>
+
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+<!--category-end-->
+
+<!--products-start-->
+<section class="p-5">
+    <div class="row">
+        <h3>Products</h3><br>
+
+        {% for product in products.object_list %}
+        <div class="col-md-3 col-xs-12 mb-5">
+            <a href="{{product.get_product_url}}" style="text-decoration: none;">
+                <div class="card  shadow p-2" style="width: -webkit-fill-available;">
+                    <img alt="Card image cap" class="card-img-top" height="270px"
+                         src="{% if product.image %}{{ product.image.url }}{% else %}#{% endif %}">
+                    <div class="card-body">
+                        <h5 class="card-title">{{product.title}}</h5>
+                        <p class="card-text">₹ {{product.price}}</p>
+                        <a class="btn btn-warning" href="{% url 'cart:add_cart' product.id %}"><i class="fa-solid fa-cart-arrow-down"></i> Add to cart</a>
+                    </div>
+                </div>
+            </a>
+        </div>
+        {% endfor %}
+        <div class="mx-auto col-xs-12">
+            {% if products.paginator.num_pages > 1 %}
+            <hr>
+            <div class="text-center">
+                {% for pg in products.paginator.page_range %}
+                <a href="?page={{pg}}" ><button class="btn-sm btn-danger text-light {% if products.number == pg %}active{% endif %}">{{pg}}</button></a>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+        <br>
+    </div>
+
+</section>
+<!--products-end-->
+
+{% endblock %}
